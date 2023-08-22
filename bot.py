@@ -7,7 +7,7 @@ from pyrogram.handlers import MessageHandler, EditedMessageHandler
 from pyrogram.utils import ainput
 
 
-logging.getLogger("pyrogram").setLevel(logging.WARNING)
+logging.getLogger("pyrogram").setLevel(logging.ERROR)
 
 user = "modyvotlx"
 user_bot = "eeobot"
@@ -26,19 +26,19 @@ async def join_chat(link, app):
 
 
 async def auto_start_in_bot(app):
-    while not await sleep(180):
+    while not await sleep(300):
         if not app.stop:
             try:
                 await app.send_message(user_bot, '/start')
             except YouBlockedUser:
                 await app.unblock_user(user_bot)
-                await sleep(0.4)
+                await sleep(1)
                 await app.send_message(user_bot, '/start')
 
 
 async def keko_tmwel_bots2(c, msg):
     points = int(msg.reply_markup.inline_keyboard[0][0].text.split(': ')[1])
-    if points >= 100 and c.give_links:
+    if points >= 1000 and c.give_links:
         try:
             await c.request_callback_answer(
                 chat_id=msg.chat.id,
@@ -48,9 +48,10 @@ async def keko_tmwel_bots2(c, msg):
         except:
             pass
         await sleep(1)
-        await msg.reply(points - 30)
+        await msg.reply(points - 25)
     else:
         try:
+            await sleep (3)
             await c.request_callback_answer(
                 chat_id=msg.chat.id,
                 message_id=msg.id,
@@ -58,7 +59,8 @@ async def keko_tmwel_bots2(c, msg):
             )
         except:
             pass
-        await sleep(1)
+
+        await sleep(3)
         try:
             await c.request_callback_answer(
                 chat_id=msg.chat.id,
@@ -69,9 +71,32 @@ async def keko_tmwel_bots2(c, msg):
             pass
 
 
+
+
+async def keko_tmwel_bots7(c, msg):
+        try:
+            sleep(200)
+            await c.request_callback_answer(
+                chat_id=msg.chat.id,
+                message_id=msg.id,
+                callback_data='homeuser'
+            )
+        except:
+            pass
+        await sleep(1)
+        try:
+            await c.request_callback_answer(
+                chat_id=msg.chat.id,
+                message_id=msg.id,
+                callback_data='col'
+            )
+        except:
+            pass
+
+
 async def keko_tmwel_bots3(c, msg):
     await join_chat(msg.reply_markup.inline_keyboard[0][0].url, c)
-    await sleep(1)
+    await sleep(5)
     try:
         await c.request_callback_answer(
             chat_id=msg.chat.id,
@@ -140,13 +165,7 @@ async def main():
         n += 1
         session = await ainput("session :\n")
         app = Client(f"user:{n}", 7720093, '51560d96d683932d1e68851e7f0fdea2', session_string=session)
-        """
-        if session == '' or not session or session is None:
-            await app.authorize()
-        if not await app.connect():
-            print('error in connect')
-            continue
-        """
+        
         try:
             await app.start()
         except Exception as e:
@@ -156,7 +175,9 @@ async def main():
         app.give_links = True
         handlers_msg = {
             keko_tmwel_bots2: filters.user(user_bot) & filters.regex('والمجموعات عن طريق التجميع النقاط'),
+            keko_tmwel_bots5: filters.user(user_bot) & filters.regex('بوت تمويل العرب'),
             keko_tmwel_bots5: filters.user(user_bot) & filters.regex('ارسل الرابط للشخص المراد تحويل النقاط له'),
+            keko_tmwel_bots7: filters.user(user_bot) & filters.regex('لا يوجد قنوات في الوقت الحالي'),
             keko_tmwel_bots4: filters.user(user_bot) & filters.regex('https'),
         }
         handlers_edit = {
@@ -171,10 +192,10 @@ async def main():
             await app.send_message(user_bot, '/start')
         except YouBlockedUser:
             await app.unblock_user(user_bot)
-            await sleep(0.4)
+            await sleep(5)
             await app.send_message(user_bot, '/start')
         create_task(auto_start_in_bot(app))
-        print(f'[{app.me.id}] -start')
+        print(f'[{app.me.id}] -started')
     await idle()
     for app2 in userbots:
         await app2.stop()
