@@ -10,7 +10,7 @@ from pyrogram.utils import ainput
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 user = "modyvotlx"
-user_bot = "eeobbot"
+user_bot = "eeobot"
 
 
 async def join_chat(link, app):
